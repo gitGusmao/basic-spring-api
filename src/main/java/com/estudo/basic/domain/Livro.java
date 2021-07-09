@@ -1,8 +1,6 @@
 package com.estudo.basic.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +8,7 @@ import java.util.List;
 public class Livro {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private Date publicacao;

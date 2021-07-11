@@ -1,6 +1,11 @@
 package com.estudo.basic.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.List;
 
@@ -10,12 +15,25 @@ public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty(message = "O nome não pode ser vazio")
     private String nome;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date publicacao;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String editora;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String resumo;
-    private String autor;
-    @Transient
+
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    @JsonIgnore
+    private Autor autor;
+
+    @OneToMany(mappedBy = "livro")
     private List<Comentario> comentarios;
 
     public Long getId() {
@@ -58,11 +76,11 @@ public class Livro {
         this.resumo = resumo;
     }
 
-    public String getAutor() {
+    public Autor getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
     }
 

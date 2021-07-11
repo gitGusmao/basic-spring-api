@@ -1,5 +1,6 @@
 package com.estudo.basic.resources;
 
+import com.estudo.basic.domain.Comentario;
 import com.estudo.basic.domain.Livro;
 import com.estudo.basic.exceptions.LivroException;
 import com.estudo.basic.repository.LivrosRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class LivrosResources {
     }
 
     @PostMapping(value = "/book")
-    public ResponseEntity<Livro> insert(@RequestBody Livro livro) {
+    public ResponseEntity<Livro> insert(@Validated @RequestBody Livro livro) {
         return ResponseEntity.status(HttpStatus.CREATED).body(livrosService.insert(livro));
     }
 
@@ -55,5 +57,16 @@ public class LivrosResources {
         livrosService.delete(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    //COMENTARIO
+    @PostMapping(value = "/book/{id}/comentario")
+    public ResponseEntity<Comentario> insert(@RequestBody Comentario comentario, @PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(livrosService.insertComment(comentario, id));
+    }
+
+    @GetMapping(value = "/book/{id}/comentario")
+    public ResponseEntity<List<Comentario>> listComentary(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(livrosService.findComment(id));
     }
 }
